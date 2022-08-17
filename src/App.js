@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+
 import './App.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -9,11 +9,18 @@ function App() {
   const [age,setAge]=useState("");
   const [email,setEmail]=useState("");
   const [id,setID]=useState("");
-  useEffect(async()=>{
+
+
+  useEffect(()=>{
+const users=async()=>{
    const response= await axios.get('https://62fc66881e6a530698a5da42.mockapi.io/user');
   setData(response.data); 
+  }
+  users();
   },[]);
-  console.log(data);
+ 
+
+
   const handleSubmit=async(e)=>{
      e.preventDefault();
      if(id){
@@ -23,7 +30,7 @@ function App() {
       email,
    })
    console.log(data)
-   var index=data.findIndex(row=>row.id==response.data.id);
+   var index=data.findIndex(row=>row.id===response.data.id);
    console.log(index);
    var user=[...data];
    user[index]=response.data;
@@ -43,7 +50,7 @@ function App() {
   
      }
   const handleUpdate=async(id)=>{
-    const selectedData=data.filter(row=>row.id==id)[0];
+    const selectedData=data.filter(row=>row.id===id)[0];
     setAge(selectedData.age);
     setName(selectedData.name);
     setEmail(selectedData.email);
@@ -54,7 +61,7 @@ function App() {
   const handleDelete=async(id)=>{
 
     // console.log(id);
-   const response= await axios.delete(`https://62fc66881e6a530698a5da42.mockapi.io/user/${id}`);
+   await axios.delete(`https://62fc66881e6a530698a5da42.mockapi.io/user/${id}`);
     const user=data.filter(row=>row.id!==id);
     setData(user);
  }
